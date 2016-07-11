@@ -4,6 +4,7 @@
   <meta name="description" content="Tic Tac Toe Game">
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/ticTacToe.css">
+  <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
  </head>
 <body>
       <div id="chooseToken" class="chooseToken">
@@ -19,19 +20,19 @@
     <h2 id="status">Tic Tac Toe</h2><br>
     <table>
       <tr>
-        <td id="0" class="cell top left"></td>
-        <td id="1" class="top cell"></td>
-        <td id="2" class="top right cell"></td>
+        <td id="0" value="0" class="cell top left"></td>
+        <td id="1"  value="1"  class="top cell"></td>
+        <td id="2"  value="2" class="top right cell"></td>
       </tr>
       <tr>
-        <td id="3" class="cell left"></td>
-        <td id="4"></td>
-        <td id="5" class ="cell right"></td>
+        <td id="3"  value="3" class="cell left"></td>
+        <td id="4" value="4" ></td>
+        <td id="5"  value="5" class ="cell right"></td>
       </tr>
       <tr>
-        <td id="6" class="cell bottom left"></td>
-        <td id="7" class="cell bottom"></td>
-        <td id="8" class="cell bottom right"></td>
+        <td id="6"  value="6" class="cell bottom left"></td>
+        <td id="7"  value="7" class="cell bottom"></td>
+        <td id="8" value="8"  class="cell bottom right"></td>
       </tr>
     </table>
     <button id="reset">Reset</button>

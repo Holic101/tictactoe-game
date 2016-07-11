@@ -1,8 +1,10 @@
-  // Global Vars
+// Global Vars
   var move,
       playerToken = "X",
       aiToken = "O",
       board = ["","","","","","","","",""],
+      playerBoard = [],
+      aiBoard = [],
       playerTurn = false,
       winners = [
               [0, 1, 2],
@@ -64,7 +66,8 @@ function cellClickHandler(e){
   e.target.innerHTML = playerToken;
   //add clicked cell to board array
   board[e.target.id] = playerToken;
-  console.log(board[e.target.id]);
+  playerBoard.push($("#"+e.target.id).attr("value"));
+
   }
   //set AI up for next turn
   playerTurn = false;
@@ -77,31 +80,54 @@ function clearGrid() {
   var clearCell = document.getElementsByTagName("td");
     for (var i =0; i<clearCell.length; i++) {
    clearCell[i].innerHTML = "";
+   board[i] = "";
     }
+    tokenChoice();
   }
 
 
 //run the game
 function play() {
     if (!playerTurn){
-      console.log(playerTurn);
-      move = 4;
+
+
   //First AI turn: Either center or corner uppper right corner cell
-      if (board[move] == ""){
-        console.log("test");
-        board[move] = aiToken;
-        document.getElementById(move).innerHTML = aiToken;
-        console.log(board[move]);
+      if (board[4] == ""){
+        board[4] = aiToken;
+        document.getElementById("4").innerHTML = aiToken;
+        aiBoard.push($("#4").attr("value"));
+        playerTurn = true;
       }
-      else {
+      else if (board[4] !== ""){
         move = 2;
         board[move] = aiToken;
         document.getElementById(move).innerHTML = aiToken;
+        aiBoard.push($("#"+move).attr("value"));
+        playerTurn = true;
+      }
+      //check for Player having just one move to win
+      else {
+        console.log("test");
+        checkForLastMove();
       }
 
     }
     aiTurn = false;
   }
+
+//checking if player has only one move to win
+function checkForLastMove() {
+  console.log("test2");
+  playerBoard = playerBoard.sort();
+  winners.filter(function(a) {
+    console.log(a);
+    if (a[0] == playerBoard[0] && a[1] == playerBoard[1]){
+      console.log(a[3]);
+      return a[3];
+
+    }
+  });
+}
 
 //check for a winner
 function winnerCheck() {
