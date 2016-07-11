@@ -11,13 +11,17 @@ body {
 }
 
 #gridContainer {
+text-align: center;
+}
 
+h2 {
+  margin-top: 20%;
 }
 
 table {
   width: 500px;
   height: 500px;
-  margin: 20% auto;
+  margin: 10% auto;
 }
 
 td {
