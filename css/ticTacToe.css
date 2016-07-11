@@ -17,6 +17,7 @@ body {
 table {
   width: 500px;
   height: 500px;
+  margin: 20% auto;
 }
 
 td {
@@ -44,7 +45,7 @@ td {
 .chooseTokenContent {
   background-color: #FAFAFA;
   border: 1px solid #607D8B;
-  margin: 40% auto;
+  margin: 20% auto;
   width: 400px;
   padding: 50px;
   border-radius: 10px;
