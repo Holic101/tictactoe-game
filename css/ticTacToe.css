@@ -1,0 +1,81 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#gridContainer {
+
+}
+
+table {
+  width: 500px;
+  height: 500px;
+}
+
+td {
+  border: 1px solid gray;
+  width: 125px;
+  height: 125px;
+  text-align: center;
+  font-size: 70px;
+  font-weight: 900;
+  font-family: Helvetica, Verdana, sans-serif;
+}
+
+.chooseToken {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.chooseTokenContent {
+  background-color: #FAFAFA;
+  border: 1px solid #607D8B;
+  margin: 40% auto;
+  width: 400px;
+  padding: 50px;
+  border-radius: 10px;
+}
+
+.choiceButton {
+  font-size: 1em;
+  font-weight: 700;
+  width: 5em;
+  height: 5em;
+  margin: 20px;
+  margin-bottom: -20px;
+  border-radius: 5px;
+  box-shadow: none;
+  background-color: #E0E0E0;
+}
+
+.chooseTokenText {
+  font-size: 2.5em;
+  font-family: Helvetica, Verdana, sans-serif;
+}
+
+.top {
+  border-top: none;
+}
+.left {
+  border-left: none;
+}
+.right {
+  border-right: none;
+}
+.bottom {
+  border-bottom: none;
+}
