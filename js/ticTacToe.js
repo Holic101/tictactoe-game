@@ -16,6 +16,7 @@
               [0, 4, 8],
               [2, 4, 6],
           ],
+          counter = 0,
           //initialize output textfields
           status = document.getElementById("status"),
           winner = document.getElementById("winner");
@@ -67,7 +68,7 @@ function cellClickHandler(e){
   //add clicked cell to board array
   board[e.target.id] = playerToken;
   playerBoard.push($("#"+e.target.id).attr("value"));
-
+  counter++;
   }
   //set AI up for next turn
   playerTurn = false;
@@ -96,6 +97,7 @@ function play() {
         board[4] = aiToken;
         document.getElementById("4").innerHTML = aiToken;
         aiBoard.push($("#4").attr("value"));
+        counter++;
         playerTurn = true;
       }
       else if (board[4] !== ""){
@@ -103,10 +105,11 @@ function play() {
         board[move] = aiToken;
         document.getElementById(move).innerHTML = aiToken;
         aiBoard.push($("#"+move).attr("value"));
+        counter++;
         playerTurn = true;
       }
       //check for Player having just one move to win
-      else {
+      else if (counter === 4){
         console.log("test");
         checkForLastMove();
       }
