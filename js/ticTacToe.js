@@ -16,7 +16,10 @@
               [0, 4, 8],
               [2, 4, 6],
           ],
-          counter = 0,
+          //count the moves by counting occupied board fields
+          moveCount = board.filter(function(value){
+            return value !== "";
+          }).length,
           //initialize output textfields
           status = document.getElementById("status"),
           winner = document.getElementById("winner");
@@ -28,6 +31,7 @@ document.getElementById("reset").addEventListener("click", clearGrid);
 tokenChoice();
 setupCellClickHandler()
 }
+
   //token choice for the player
   function tokenChoice() {
             var chooseToken = document.getElementById("chooseToken");
@@ -46,8 +50,6 @@ setupCellClickHandler()
                 if (playerToken === "O") {
                     playerTurn = false;
                     play();
-                } else {
-                    whosTurnIsIt();
                 }
             });
         }
@@ -60,7 +62,6 @@ function setupCellClickHandler() {
   }
 
 }
-
 function cellClickHandler(e){
   if (playerTurn && e.target.innerHTML === ""){
   //fill out clicked cell with user token
@@ -68,9 +69,10 @@ function cellClickHandler(e){
   //add clicked cell to board array
   board[e.target.id] = playerToken;
   playerBoard.push($("#"+e.target.id).attr("value"));
-  counter++;
   }
+  moveCount;
   //set AI up for next turn
+  winnerCheck();
   playerTurn = false;
   //call function for AI move
   play();
@@ -86,44 +88,40 @@ function clearGrid() {
     tokenChoice();
   }
 
-
 //run the game
 function play() {
+  //ToDo: Implement setTimeout with 200ms to simulate AI "thinking"
     if (!playerTurn){
-
-
   //First AI turn: Either center or corner uppper right corner cell
       if (board[4] == ""){
         board[4] = aiToken;
         document.getElementById("4").innerHTML = aiToken;
         aiBoard.push($("#4").attr("value"));
-        counter++;
         playerTurn = true;
+        moveCount;
       }
-      else if (board[4] !== ""){
+      else if (board[4] !== "" && board[2]===""){
         move = 2;
         board[move] = aiToken;
         document.getElementById(move).innerHTML = aiToken;
         aiBoard.push($("#"+move).attr("value"));
-        counter++;
         playerTurn = true;
+        moveCount;
       }
       //check for Player having just one move to win
-      else if (counter === 4){
+      else if (moveCount === 4){
         console.log("test");
         checkForLastMove();
       }
-
     }
     aiTurn = false;
-  }
+}
 
 //checking if player has only one move to win
 function checkForLastMove() {
-  console.log("test2");
   playerBoard = playerBoard.sort();
   winners.filter(function(a) {
-    console.log(a);
+    console.log(a[3]);
     if (a[0] == playerBoard[0] && a[1] == playerBoard[1]){
       console.log(a[3]);
       return a[3];
@@ -134,15 +132,14 @@ function checkForLastMove() {
 
 //check for a winner
 function winnerCheck() {
-
-    document.getElementById("winner").innerHTML = "You win!";
-    document.getElementById("winner").innerHTML = "You lose!";
+    for (var i = 0; i<winners.length; i++) {
+      if (board[winners[i][0]]==board[winners[i][1]]==board[winners[i][2]]==playerToken){
+        document.getElementById("winner").innerHTML = "You win!";
+      }
+      else if (board[winners[i][0]]==board[winners[i][1]]==board[winners[i][2]]==aiToken){
+        document.getElementById("winner").innerHTML = "You lose!";
+      }
+    }
   }
-
-
-//display prompt for next player
-function whosTurnIsIt() {
-              status.innerHTML = "Your turn: " + playerToken;
-          }
 
 window.onload = init();
