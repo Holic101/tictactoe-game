@@ -101,14 +101,23 @@ function play() {
         countMoves();
         playerTurn = true;
       }
-      else if (board[4] !== "" && board[2] === ""){
-        move = 2;
-        updateBoard(move, aiToken, aiBoard);
-        countMoves();
-        playerTurn = true;
+      //ToDo: What if player chooses field 2?
+      else if (board[4] !== "" && board[2] === "" || board[0] === ""){
+        if(board[0]===""){
+          move = 0;
+          updateBoard(move, aiToken, aiBoard);
+          countMoves();
+          playerTurn = true;
+        }
+        else if (board[2]===""){
+          move = 2;
+          updateBoard(move, aiToken, aiBoard);
+          countMoves();
+          playerTurn = true;
+        }  
       }
-      //check for Player having just one move to win
-      else if (moveCount === 4){
+      //check for Player having just one move to win after 3 or 4 moves
+      else if (moveCount === 3 || moveCount === 4){
         checkForLastMove();
         updateBoard(nextMove, aiToken, aiBoard);
         playerTurn = true;
@@ -118,6 +127,7 @@ function play() {
     aiTurn = false;
 }
 //checking if player has only one move to win
+//ToDo: What if moveCount is > 4 and playerBoard has more than 2 elements???
 function checkForLastMove() {
   playerBoard = playerBoard.sort();
   winners.map(function(a) {
@@ -138,7 +148,7 @@ function checkForLastMove() {
 //choose attacking move for AI
 function aiAttackMove(){
   //ToDo: Check if forking is possible, if not, choose nextMove adjacent to a token in a row with 2 free fields
-  
+
 }
 //check for a winner
 function winnerCheck() {
