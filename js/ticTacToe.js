@@ -34,7 +34,7 @@ setupCellClickHandler()
             var choiceBtn = document.querySelector(".chooseTokenContent");
             chooseToken.style.display = "block";
             choiceBtn.addEventListener("click", function(e) {
-                playerToken = e.target.value;
+                playerToken = e.target.value || "X";
                 if (playerToken === "X"){
                   aiToken = "O";
                   playerTurn = true;
