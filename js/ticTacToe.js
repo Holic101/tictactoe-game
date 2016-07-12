@@ -6,6 +6,7 @@
       playerBoard = [],
       aiBoard = [],
       playerTurn = false,
+      move = 0,
       winners = [
               [0, 1, 2],
               [3, 4, 5],
@@ -16,13 +17,13 @@
               [0, 4, 8],
               [2, 4, 6],
           ],
-          //count the moves by counting occupied board fields
-          moveCount = board.filter(function(value){
-            return value !== "";
-          }).length,
           //initialize output textfields
           status = document.getElementById("status"),
-          winner = document.getElementById("winner");
+          winner = document.getElementById("winner"),
+          //count the moves by counting occupied board fields
+          //ToDo: moveCount needs to be updated
+          moveCount = board.filter(function(value){return value !== "";}).length;
+
 
 function init () {
 //setup reset button
@@ -70,7 +71,6 @@ function cellClickHandler(e){
   board[e.target.id] = playerToken;
   playerBoard.push($("#"+e.target.id).attr("value"));
   }
-  moveCount;
   //set AI up for next turn
   winnerCheck();
   playerTurn = false;
@@ -90,27 +90,25 @@ function clearGrid() {
 
 //run the game
 function play() {
+
   //ToDo: Implement setTimeout with 200ms to simulate AI "thinking"
     if (!playerTurn){
-  //First AI turn: Either center or corner uppper right corner cell
+  //First AI turn: Either center or uppper right corner cell
       if (board[4] == ""){
         board[4] = aiToken;
         document.getElementById("4").innerHTML = aiToken;
         aiBoard.push($("#4").attr("value"));
         playerTurn = true;
-        moveCount;
       }
-      else if (board[4] !== "" && board[2]===""){
+      else if (board[4] !== "" && board[2] === ""){
         move = 2;
         board[move] = aiToken;
         document.getElementById(move).innerHTML = aiToken;
         aiBoard.push($("#"+move).attr("value"));
         playerTurn = true;
-        moveCount;
       }
       //check for Player having just one move to win
       else if (moveCount === 4){
-        console.log("test");
         checkForLastMove();
       }
     }
@@ -141,5 +139,7 @@ function winnerCheck() {
       }
     }
   }
+
+
 
 window.onload = init();
