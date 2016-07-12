@@ -118,7 +118,7 @@ function play() {
 //checking if player has only one move to win
 function checkForLastMove() {
   playerBoard = playerBoard.sort();
-  winners.filter(function(a) {
+  winners.map(function(a) {
     console.log(a[3]);
     if (a[0] == playerBoard[0] && a[1] == playerBoard[1]){
       console.log(a[3]);
