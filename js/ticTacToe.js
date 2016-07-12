@@ -19,10 +19,14 @@
           ],
           //initialize output textfields
           status = document.getElementById("status"),
-          winner = document.getElementById("winner"),
-          //count the moves by counting occupied board fields
-          //ToDo: moveCount needs to be updated
-          moveCount = board.filter(function(value){return value !== "";}).length;
+          winner = document.getElementById("winner");
+
+function countMoves(){
+  return //count the moves by counting occupied board fields
+  //ToDo: moveCount needs to be updated after each move, but how??
+  moveCount = board.filter(function(value){return value !== "";}).length;
+}
+
 
 
 function init () {
