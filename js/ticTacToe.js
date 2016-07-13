@@ -9,6 +9,8 @@
       move = 0,
       nextMove,
       moveCount,
+      counter = 0,
+      winningArray = [],
       winners = [
               [0, 1, 2],
               [3, 4, 5],
@@ -38,7 +40,9 @@ function updateBoard(val, token, playingBoard) {
 function setupCellClickHandler() {
   cellArray = document.getElementsByTagName("td");
   for (var i = 0; i<cellArray.length; i++ ){
-    cellArray[i].addEventListener("click", cellClickHandler);
+    if (cellArray[i].innerHTML === "") {
+      cellArray[i].addEventListener("click", cellClickHandler);
+    }
   }
 }
 function cellClickHandler(e){
@@ -101,7 +105,6 @@ function play() {
         countMoves();
         playerTurn = true;
       }
-      //ToDo: What if player chooses field 2?
       else if (board[4] !== "" && board[2] === "" || board[0] === ""){
         if(board[0]===""){
           move = 0;
@@ -114,7 +117,7 @@ function play() {
           updateBoard(move, aiToken, aiBoard);
           countMoves();
           playerTurn = true;
-        }  
+        }
       }
       //check for Player having just one move to win after 3 or 4 moves
       else if (moveCount === 3 || moveCount === 4){
@@ -143,12 +146,30 @@ function checkForLastMove() {
     return nextMove;
   });
   //If there is no danger of player winning, the AI should choose its next move
+  //first check for what might be a winning combination
   aiAttackMove();
+  //then select the field of the winning array that is still to fill and return it as nextMove
+  winningArray.map = function(a) {
+    if (!a.indexOf(aiBoard)){
+      console.log(a);
+      return nextMove = a;
+    }
+  }
 }
 //choose attacking move for AI
 function aiAttackMove(){
-  //ToDo: Check if forking is possible, if not, choose nextMove adjacent to a token in a row with 2 free fields
-
+  //ToDo: Check if forking is possible, if not, choose next logical move
+  //check for winning move first
+  winners.map = function(a) {
+    for (var i = 0; i<a.length; i++) {
+      if (a[i].indexOf(aiBoard)){
+        counter++;
+        if(counter == 2) {
+          return winningArray = a;
+        }
+      }
+    }
+  }
 }
 //check for a winner
 function winnerCheck() {
