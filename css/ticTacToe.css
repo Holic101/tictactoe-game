@@ -47,24 +47,20 @@ td {
 }
 
 .chooseTokenContent {
-  background-color: #FAFAFA;
-  border: 1px solid #607D8B;
+  background-color: #fff;
+  border: 1px solid #ddd;
   margin: 20% auto;
-  width: 400px;
+  width: 350px;
   padding: 50px;
-  border-radius: 10px;
+  border-radius: 200px;
 }
 
 .choiceButton {
-  font-size: 1em;
-  font-weight: 700;
-  width: 5em;
-  height: 5em;
+  font-size: 1.8em;
+  font-weight: 900;
+  width: 3em;
+  height: 3em;
   margin: 20px;
-  margin-bottom: -20px;
-  border-radius: 5px;
-  box-shadow: none;
-  background-color: #E0E0E0;
 }
 
 .chooseTokenText {
