@@ -8,6 +8,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: Helvetica, Verdana, sans-serif;
 }
 
 #gridContainer {
@@ -31,7 +32,6 @@ td {
   text-align: center;
   font-size: 70px;
   font-weight: 900;
-  font-family: Helvetica, Verdana, sans-serif;
 }
 
 .chooseToken {
@@ -46,10 +46,22 @@ td {
   text-align: center;
 }
 
+#winnerDiv {
+  display: none;
+  font-size: 2.5em;
+  font-weight: 900;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin: 10% auto;
+  width: 350px;
+  padding: 50px;
+  border-radius: 200px;
+}
+
 .chooseTokenContent {
   background-color: #fff;
   border: 1px solid #ddd;
-  margin: 20% auto;
+  margin: 10% auto;
   width: 350px;
   padding: 50px;
   border-radius: 200px;
@@ -61,11 +73,11 @@ td {
   width: 3em;
   height: 3em;
   margin: 20px;
+  box-shadow: 5px 5px 5px 2px #ddd;
 }
 
 .chooseTokenText {
   font-size: 2.5em;
-  font-family: Helvetica, Verdana, sans-serif;
 }
 
 .top {

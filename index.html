@@ -4,14 +4,14 @@
   <meta name="description" content="Tic Tac Toe Game">
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/ticTacToe.css">  
+  <link rel="stylesheet" href="css/ticTacToe.css">
  </head>
 <body>
       <div id="chooseToken" class="chooseToken">
+        <div id="winnerDiv"></div>
         <div class="chooseTokenContent">
             <p class="chooseTokenText">Select your token:</p>
             <button class="choiceButton btn btn-primary" value="X">X</button>
-            <span class="chooseTokenText"></span>
             <button class="choiceButton btn btn-primary" value="O">O</button>
         </div>
     </div>
@@ -35,7 +35,7 @@
         <td id="8" value="8"  class="cell bottom right"></td>
       </tr>
     </table>
-      <p id="winner">This line should change...</p>
+    <!--  <p id="winner">It is on!</p> -->
     <button id="reset">Reset</button>
   </div>
 

@@ -1,16 +1,20 @@
 // Global Vars
+//ToDo: Make a class named "State" that will include all information
+//concerning the state of the game
   var move,
       playerToken = "X",
       aiToken = "O",
       board = ["","","","","","","","",""],
+      cellArray = document.getElementsByTagName("td"),
       playerBoard = [],
       aiBoard = [],
       playerTurn = false,
-      move = 0,
+      aiTurn = false,
       nextMove,
-      moveCount,
-      counter = 0,
-      winningArray = [],
+      win = false, lose = false, tie = false,
+      aiMoveCount,
+      playerMoveCount,
+      gameOver = false,
       winners = [
               [0, 1, 2],
               [3, 4, 5],
@@ -20,15 +24,21 @@
               [2, 5, 8],
               [0, 4, 8],
               [2, 4, 6],
-          ],
-          //initialize output textfields
-          status = document.getElementById("status"),
-          winner = document.getElementById("winner");
+          ];
 
 //setup functions
 //count the moves by counting occupied board fields
-function countMoves(){
-  return moveCount = board.filter(function(value){return value !== "";}).length;
+function countMoves(player) {
+  if (player == "ai"){
+    return aiMoveCount = board.filter(function(value){
+      return value === aiToken;
+    }).length;
+  }
+  else if (player == "user"){
+    return playerMoveCount = board.filter(function(value){
+      return value === playerToken;
+    }).length;
+  }
 }
 //draw tokens on the board and update board Array
 function updateBoard(val, token, playingBoard) {
@@ -38,7 +48,6 @@ function updateBoard(val, token, playingBoard) {
 }
 //set up cell click handler
 function setupCellClickHandler() {
-  cellArray = document.getElementsByTagName("td");
   for (var i = 0; i<cellArray.length; i++ ){
     if (cellArray[i].innerHTML === "") {
       cellArray[i].addEventListener("click", cellClickHandler);
@@ -46,23 +55,32 @@ function setupCellClickHandler() {
   }
 }
 function cellClickHandler(e){
-  if (playerTurn && e.target.innerHTML === ""){
+  //ToDo: avoid function call by click on non-empty fields
+  if (playerTurn && e.target.innerHTML === "" && !gameOver){
   updateBoard(e.target.id, playerToken, playerBoard);
-  countMoves();
-  }
+  countMoves("user");
   //set AI up for next turn
   winnerCheck();
   playerTurn = false;
+  aiTurn = true;
   //call function for AI move
   play();
+  }
 }
 //Clear grid
 function clearGrid() {
-  var clearCell = document.getElementsByTagName("td");
-    for (var i =0; i<clearCell.length; i++) {
-   clearCell[i].innerHTML = "";
-   board[i] = "";
+  //reset the grid
+    for (var i =0; i<cellArray.length; i++) {
+   cellArray[i].innerHTML = "";
     }
+    //reset game variables
+    gameOver = false;
+    board = ["","","","","","","","",""];
+    aiBoard = [];
+    win = lose = tie = false;
+    playerBoard = [];
+    aiMoveCount = 0;
+    winningArray = [];
     tokenChoice();
   }
 function init () {
@@ -75,6 +93,9 @@ setupCellClickHandler()
 function tokenChoice() {
             var chooseToken = document.getElementById("chooseToken");
             var choiceBtn = document.querySelector(".chooseTokenContent");
+            var winnerDiv = document.getElementById("winnerDiv");
+            winnerDiv.style.display = "none";
+            choiceBtn.style.display = "block";
             chooseToken.style.display = "block";
             choiceBtn.addEventListener("click", function(e) {
                 playerToken = e.target.value || "X";
@@ -96,90 +117,201 @@ function tokenChoice() {
 //game control functions
 //run the game
 function play() {
-  //ToDo: Implement setTimeout with 200ms to simulate AI "thinking"
-    if (!playerTurn){
-  //First AI turn: Either center or uppper right corner cell
-      if (board[4] == ""){
-        move = 4;
-        updateBoard(move, aiToken, aiBoard);
-        countMoves();
-        playerTurn = true;
-      }
-      else if (board[4] !== "" && board[2] === "" || board[0] === ""){
-        if(board[0]===""){
-          move = 0;
-          updateBoard(move, aiToken, aiBoard);
-          countMoves();
-          playerTurn = true;
-        }
-        else if (board[2]===""){
-          move = 2;
-          updateBoard(move, aiToken, aiBoard);
-          countMoves();
-          playerTurn = true;
-        }
-      }
-      //check for Player having just one move to win after 3 or 4 moves
-      else if (moveCount === 3 || moveCount === 4){
-        checkForLastMove();
+  //it needs to be ai's turn and no gameOver
+    if (!playerTurn && !gameOver){
+      countMoves("user");
+  //If user hasn't made 2 moves yet there is no need for defense
+  if (playerMoveCount < 2){
+    //first ai move should be upper left corner
+    if (board[0] === ""){
+      setTimeout(function() {
+        nextMove = 0;
         updateBoard(nextMove, aiToken, aiBoard);
+        countMoves("ai");
         playerTurn = true;
-      }
-    }
-    winnerCheck();
-    aiTurn = false;
-}
-//checking if player has only one move to win
-//ToDo: What if moveCount is > 4 and playerBoard has more than 2 elements???
-function checkForLastMove() {
-  playerBoard = playerBoard.sort();
+      }, 300);
+    }//end board[0] if
+    //second ai move is the opposite corner
+    else if (board[8] === "") {
+      setTimeout(function() {
+        nextMove = 8;
+        updateBoard(nextMove, aiToken, aiBoard);
+        countMoves("ai");
+        playerTurn = true;
+      }, 300);
+    }//end else if
+    //alternative ai move if 0 and 8 are both taken
+    else {
+      setTimeout(function() {
+        nextMove = 2;
+        updateBoard(nextMove, aiToken, aiBoard);
+        countMoves("ai");
+        playerTurn = true;
+      }, 300);
+    }//end else
+  }// end playerMoveCount if
+      // after two ai moves it gets a little more complicated :)
+      else {
+        setTimeout(function() {
+          //the following iterations could also be done with winners.some and return true or false
+          winners.map(function(a) {
+            if (board[a[0]] === aiToken && board[a[1]] === aiToken && board[a[2]] === "" || board[a[0]] === aiToken && board[a[2]] === aiToken && board[a[1]] === "" || board[a[1]] === aiToken && board[a[2]] === aiToken && board[a[0]] === "") {
+              if (aiTurn) {
+              checkForWinningMove();
+              updateBoard(nextMove, aiToken, aiBoard);
+              countMoves("ai");
+              winnerCheck();
+              playerTurn = true;
+              aiTurn = false;
+              }
+            }
+          });
+            //check if defense is necessary
+            winners.map(function(a) {
+              if (board[a[0]] === playerToken && board[a[1]] === playerToken && board[a[2]] === "" || board[a[0]] === playerToken && board[a[2]] === playerToken && board[a[1]] === "" || board[a[1]] === playerToken && board[a[2]] === playerToken && board[a[0]] === "" ) {
+                if (aiTurn) {
+                  checkForDefense();
+                  updateBoard(nextMove, aiToken, aiBoard);
+                  countMoves("ai");
+                  winnerCheck();
+                  playerTurn = true;
+                  aiTurn = false;
+              }
+            }
+          });
+            //if neither winning nor defending is possible choose next attacking move
+            winners.map(function(a) {
+            if (board[a[0]] === aiToken && board[a[1]] === "" && board[a[2]] === "" || board[a[1]] === aiToken && board[a[0]] === "" && board[a[2]] === "" || board[a[2]] === aiToken && board[a[0]] === "" && board[a[1]] === "" || board[a[2]] === aiToken && board[a[0]] === playerToken && board[a[1]] === "" || board[a[2]] === playerToken && board[a[0]] === aiToken && board[a[1]] === "") {
+              if (aiTurn) {
+                aiAttackingMove();
+                updateBoard(nextMove, aiToken, aiBoard);
+                countMoves("ai");
+                winnerCheck();
+                playerTurn = true;
+                aiTurn = false;
+              }
+            }
+          }); //end mapping through winners array
+        }, 300);
+      }//end else
+    }//end outer if
+}//end of play()
+//checking if ai has only one move to win
+function checkForWinningMove(){
   winners.map(function(a) {
-    if (a[0] == playerBoard[0] && a[1] == playerBoard[1]){
-      nextMove = a[2];
-    }
-    else if (a[0] == playerBoard[0] && a[2] == playerBoard[1]){
-      nextMove = a[1];
-    }
-    else if (a[1] == playerBoard[0] && a[2] == playerBoard[1]){
-      nextMove = a[0];
-    }
-    return nextMove;
-  });
-  //If there is no danger of player winning, the AI should choose its next move
-  //first check for what might be a winning combination
-  aiAttackMove();
-  //then select the field of the winning array that is still to fill and return it as nextMove
-  winningArray.map = function(a) {
-    if (!a.indexOf(aiBoard)){
-      console.log(a);
-      return nextMove = a;
-    }
-  }
-}
-//choose attacking move for AI
-function aiAttackMove(){
-  //ToDo: Check if forking is possible, if not, choose next logical move
-  //check for winning move first
-  winners.map = function(a) {
-    for (var i = 0; i<a.length; i++) {
-      if (a[i].indexOf(aiBoard)){
-        counter++;
-        if(counter == 2) {
-          return winningArray = a;
+    if (board[a[0]] === aiToken && board[a[1]] === aiToken && board[a[2]] === ""){
+          nextMove = a[2];
+          return nextMove;
         }
-      }
+    else if (board[a[0]] === aiToken && board[a[2]] === aiToken && board[a[1]] === ""){
+          nextMove = a[1];
+          return nextMove;
+        }
+    else if (board[a[1]] === aiToken && board[a[2]] === aiToken && board[a[0]] === ""){
+          nextMove = a[0];
+          return nextMove;
+        }
+  });
+}
+//check defending moves
+function checkForDefense() {
+  winners.map(function(a) {
+    if (board[a[0]] === playerToken && board[a[1]] === playerToken && board[a[2]] === ""){
+      nextMove = a[2];
+      return nextMove;
     }
-  }
+    else if (board[a[0]] === playerToken && board[a[2]] === playerToken && board[a[1]] === ""){
+      nextMove = a[1];
+      return nextMove;
+    }
+    else if (board[a[1]] === playerToken && board[a[2]] === playerToken && board[a[0]] === ""){
+      nextMove = a[0];
+      return nextMove;
+    }
+  });
+}
+    //if defending not necessary, look for a winning move
+        //If there is no danger of player winning and no possibility to
+        // immediately win for AI
+        // then AI should play its next token on a free field in a "winner" with
+        // no player tokens in it, but one aiToken already there
+function aiAttackingMove() {
+  winners.map(function(a) {
+    if (board[a[0]] === aiToken && board[a[1]] === "" && board[a[2]] === "") {
+      nextMove = a[2];
+      return nextMove;
+    }
+    else if (board[a[1]] === aiToken && board[a[0]] === "" && board[a[2]] === "") {
+      nextMove = a[0];
+      return nextMove;
+    }
+    else if (board[a[2]] === aiToken && board[a[0]] === "" && board[a[1]] === "") {
+      nextMove = a[0];
+      return nextMove;
+    }
+    //if nothing else fits there must be only two free fields left, pick the first one
+    else if (board[a[2]] === aiToken && board[a[0]] === playerToken && board[a[1]] === "") {
+      nextMove = a[1];
+      return nextMove;
+    }
+    else if (board[a[2]] === playerToken && board[a[0]] === aiToken && board[a[1]] === "") {
+      nextMove = a[1];
+      return nextMove;
+    }
+});
 }
 //check for a winner
 function winnerCheck() {
+  //restart the game by resetting the board, moveCount and all game states
+  //and displaying the token choice screen
     for (var i = 0; i<winners.length; i++) {
-      if (board[winners[i][0]]==board[winners[i][1]]==board[winners[i][2]]==playerToken){
-        document.getElementById("winner").innerHTML = "You win!";
+      //check for player win
+      if (board[winners[i][0]] == playerToken && board[winners[i][1]] == playerToken && board[winners[i][2]] == playerToken){
+        win = true;
+        gameOver = true;
+        showWinner();
+        setTimeout(function() {
+          clearGrid();
+        }, 2000);
       }
-      else if (board[winners[i][0]]==board[winners[i][1]]==board[winners[i][2]]==aiToken){
-        document.getElementById("winner").innerHTML = "You lose!";
+      //check for player lose
+      else if (board[winners[i][0]] == aiToken && board[winners[i][1]] == aiToken && board[winners[i][2]] == aiToken){
+        lose = true;
+        gameOver = true;
+        showWinner();
+        setTimeout(function() {
+          clearGrid();
+        }, 2000);
+      }
+      //check for a draw
+      else if (aiToken == "X" && aiMoveCount == 5 || playerToken == "X" && playerMoveCount == 5) {
+        tie = true;
+        gameOver = true;
+        showWinner();
+        setTimeout(function() {
+          clearGrid();
+        }, 2000);
       }
     }
   }
+//function that displays the winning combination
+function showWinner() {
+  //display the announcement div
+  var winnerDiv = document.getElementById("winnerDiv");
+  var chooseToken = document.getElementById("chooseToken");
+  var choiceBtn = document.querySelector(".chooseTokenContent");
+  winnerDiv.style.display = "block";
+  choiceBtn.style.display = "none";
+  chooseToken.style.display = "block";
+  //check different game end scenarios
+  if (win) {
+    winnerDiv.innerHTML = "You Win! :)"
+  }
+  else if (lose) {
+    winnerDiv.innerHTML = "You Lose! :("
+  }
+  else if (tie) {
+    winnerDiv.innerHTML = "It's a Tie! :| "
+  }
+}
 window.onload = init();
